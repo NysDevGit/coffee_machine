@@ -12,11 +12,6 @@ public class Drink {
         this.extraHot = extraHot;
     }
 
-    public Drink(DrinkType type, SugarNumber sugarNumber){
-        this.type = type;
-        this.sugarNumber = sugarNumber;
-    }
-
     public Drink(DrinkType type){
         this.type = type;
         this.sugarNumber = SugarNumber.ZERO;
