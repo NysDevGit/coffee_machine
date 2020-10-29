@@ -1,17 +1,17 @@
 package model;
 
 public enum SugarNumber {
-    ZERO(0),
-    ONE(1),
-    TWO(2);
+    ZERO(":"),
+    ONE("1:0"),
+    TWO("2:0");
 
-    private final int value;
+    private final String value;
 
-    SugarNumber(int value) {
+    SugarNumber(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 

@@ -13,7 +13,7 @@ public class Drink {
         return type;
     }
 
-    public int getSugarNumber() {
+    public String getSugarNumber() {
         return sugarNumber.getValue();
     }
 
