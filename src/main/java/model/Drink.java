@@ -4,6 +4,13 @@ public class Drink {
 
     private final DrinkType type;
     private final SugarNumber sugarNumber;
+    private Boolean extraHot = null;
+
+    public Drink(DrinkType type, SugarNumber sugarNumber, Boolean extraHot){
+        this.type = type;
+        this.sugarNumber = sugarNumber;
+        this.extraHot = extraHot;
+    }
 
     public Drink(DrinkType type, SugarNumber sugarNumber){
         this.type = type;
@@ -21,5 +28,9 @@ public class Drink {
 
     public String getSugarNumber() {
         return sugarNumber.getValue();
+    }
+
+    public Boolean isExtraHot(){
+        return extraHot;
     }
 }
