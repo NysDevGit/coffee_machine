@@ -1,6 +1,7 @@
 package business;
 
 import model.Drink;
+import model.HotDrink;
 import model.exception.NotEnoughMoneyException;
 
 import java.util.StringJoiner;
@@ -27,11 +28,18 @@ public class OrderSender {
         }
     }
 
-    private String translateOrder(Drink drinkOrder){
+    private String translateOrder(Drink drink){
         StringJoiner stringOrder = new StringJoiner(":");
+        String code = drink.getType().getCode();
 
-        stringOrder.add(drinkOrder.getType().getCode());
-        stringOrder.add(drinkOrder.getSugarNumber());
+        if(drink instanceof HotDrink){
+            HotDrink hotDrink = (HotDrink) drink;
+            if(hotDrink.isExtraHot())
+                code += "h";
+        }
+
+        stringOrder.add(code);
+        stringOrder.add(drink.getSugarNumber());
 
         return  stringOrder.toString();
     }
