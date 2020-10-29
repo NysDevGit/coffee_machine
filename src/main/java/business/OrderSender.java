@@ -22,7 +22,6 @@ public class OrderSender {
 
         stringOrder.add(drinkOrder.getType().getCode());
         stringOrder.add(drinkOrder.getSugarNumber() > 0 ? String.valueOf(drinkOrder.getSugarNumber()) : "");
-        stringOrder.add(drinkOrder.isWithStick() ? "0" : "");
 
         return  stringOrder.toString();
     }
