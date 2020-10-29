@@ -1,4 +1,4 @@
-package model.type;
+package model;
 
 public enum DrinkType {
     CHOCOLATE("H",0.5),

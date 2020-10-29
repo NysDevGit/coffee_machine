@@ -1,12 +1,10 @@
 package model;
 
-import model.type.DrinkType;
-
 public class Drink {
     private final DrinkType type;
-    private final int sugarNumber;
+    private final SugarNumber sugarNumber;
 
-    public Drink(DrinkType type, int sugarNumber){
+    public Drink(DrinkType type, SugarNumber sugarNumber){
         this.type = type;
         this.sugarNumber = sugarNumber;
     }
@@ -16,7 +14,7 @@ public class Drink {
     }
 
     public int getSugarNumber() {
-        return sugarNumber;
+        return sugarNumber.getValue();
     }
 
 }
