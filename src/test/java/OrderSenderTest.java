@@ -1,6 +1,7 @@
 import business.DrinkMaker;
 import business.OrderSender;
 import model.Drink;
+import model.exception.TooMuchSugarException;
 import model.type.DrinkType;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,25 +24,31 @@ public class OrderSenderTest {
     }
 
     @Test
-    public void shouldMakeATeaWith1SugarAndAStick(){
+    public void shouldMakeATeaWith1Sugar(){
         Drink drink = createDrink(DrinkType.TEA,1);
         new OrderSender(drinkMaker).send(drink);
         verify(drinkMaker, times(1)).prepare("T:1:0");
     }
 
     @Test
-    public void shouldMakeACoffeeWith2SugarsAndAStick(){
+    public void shouldMakeACoffeeWith2Sugars(){
         Drink drink = createDrink(DrinkType.COFFEE,2);
         new OrderSender(drinkMaker).send(drink);
         verify(drinkMaker, times(1)).prepare("C:2:0");
     }
 
     @Test
-    public void shouldMakeAChocolateWithoutSugarAndNoStick(){
+    public void shouldMakeAChocolateWithoutSugar(){
         Drink drink = createDrink(DrinkType.CHOCOLATE,0);
         new OrderSender(drinkMaker).send(drink);
         verify(drinkMaker, times(1)).prepare("H::");
     }
+
+    @Test(expected = TooMuchSugarException.class)
+    public void shouldThrowTooMuchSugarExceptionWhenThereAreMoreThanTwoSugar(){
+        createDrink(DrinkType.CHOCOLATE,3);
+    }
+
 
     private Drink createDrink(DrinkType type, int sugarNumber){
         return  new Drink(type,sugarNumber);
