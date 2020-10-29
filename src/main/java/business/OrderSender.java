@@ -2,7 +2,6 @@ package business;
 
 import model.Drink;
 import model.exception.NotEnoughMoneyException;
-import org.apache.commons.lang3.BooleanUtils;
 
 import java.util.StringJoiner;
 
@@ -32,7 +31,7 @@ public class OrderSender {
         StringJoiner stringOrder = new StringJoiner(":");
         String code = drink.getType().getCode();
 
-        if(BooleanUtils.isTrue(drink.isExtraHot()))
+        if(drink.isExtraHot())
             code += "h";
 
         stringOrder.add(code);
