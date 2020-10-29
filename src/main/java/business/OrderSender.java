@@ -27,11 +27,15 @@ public class OrderSender {
         }
     }
 
-    private String translateOrder(Drink drinkOrder){
+    private String translateOrder(Drink drink){
         StringJoiner stringOrder = new StringJoiner(":");
+        String code = drink.getType().getCode();
 
-        stringOrder.add(drinkOrder.getType().getCode());
-        stringOrder.add(drinkOrder.getSugarNumber());
+        if(drink.isExtraHot())
+            code += "h";
+
+        stringOrder.add(code);
+        stringOrder.add(drink.getSugarNumber());
 
         return  stringOrder.toString();
     }
