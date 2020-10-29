@@ -5,7 +5,7 @@ import model.type.DrinkType;
 
 public class Drink {
     private final DrinkType type;
-    private int sugarNumber;
+    private final int sugarNumber;
 
     public Drink(DrinkType type, int sugarNumber){
         this.type = type;
