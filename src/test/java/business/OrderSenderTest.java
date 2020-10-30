@@ -132,7 +132,7 @@ public class OrderSenderTest {
 
     @Test
     public void shouldMakeAnOrangeJuice(){
-        ColdDrink coldDrink = createColdDrink(DrinkType.ORANGE_JUICE);
+        ColdDrink coldDrink = createColdDrink();
         new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(coldDrink,0.6);
         verify(drinkMaker, times(1)).process("O::");
         verify(accountReportRepository, times(1)).save(coldDrink);
@@ -140,7 +140,7 @@ public class OrderSenderTest {
 
     @Test
     public void shouldMakeAnOrangeJuiceIfThereIsMoreMoneyThanExpected(){
-        ColdDrink coldDrink = createColdDrink(DrinkType.ORANGE_JUICE);
+        ColdDrink coldDrink = createColdDrink();
         new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(coldDrink,0.9);
         verify(drinkMaker, times(1)).process("O::");
         verify(accountReportRepository, times(1)).save(coldDrink);
@@ -148,7 +148,7 @@ public class OrderSenderTest {
 
     @Test(expected = NotEnoughMoneyException.class)
     public void shouldThrowNotEnoughMoneyExceptionIfThereIsNotEnoughMoneyForOrangeJuice(){
-        ColdDrink coldDrink = createColdDrink(DrinkType.ORANGE_JUICE);
+        ColdDrink coldDrink = createColdDrink();
         new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(coldDrink,0.5);
         verify(drinkMaker, times(1)).process("M:Missing 0.1 euro");
         verify(accountReportRepository, never()).save(coldDrink);
@@ -202,7 +202,7 @@ public class OrderSenderTest {
     @Test(expected = ShortageException.class)
     public void shouldThrowShortageExceptionOrangeJuiceCase(){
         when(beverageQuantityChecker.isEmpty(anyString())).thenReturn(true);
-        ColdDrink coldDrink = createColdDrink(DrinkType.ORANGE_JUICE);
+        ColdDrink coldDrink = createColdDrink();
         verifyShortageExceptionOnDrinks(coldDrink, 0.7);
     }
 
@@ -210,8 +210,8 @@ public class OrderSenderTest {
         return new HotDrink(type,sugarNumber, isExtraHot);
     }
 
-    private ColdDrink createColdDrink(DrinkType type){
-        return new ColdDrink(type);
+    private ColdDrink createColdDrink(){
+        return new ColdDrink(DrinkType.ORANGE_JUICE);
     }
 
     private void verifyShortageExceptionOnDrinks(Drink drink, double money){

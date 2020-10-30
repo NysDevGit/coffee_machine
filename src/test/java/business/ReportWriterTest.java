@@ -26,7 +26,7 @@ public class ReportWriterTest {
     private final AccountReportRepository accountReportRepository = spy(new AccountReportRepositoryImpl());
 
     @Spy
-    private ReportWriter reportWriter = new ReportWriter(accountReportRepository);
+    private final ReportWriter reportWriter = new ReportWriter(accountReportRepository);
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
