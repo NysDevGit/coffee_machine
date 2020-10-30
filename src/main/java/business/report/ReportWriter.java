@@ -1,4 +1,4 @@
-package business;
+package business.report;
 
 import model.Drink;
 import org.apache.commons.collections4.CollectionUtils;

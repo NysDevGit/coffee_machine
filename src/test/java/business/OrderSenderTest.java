@@ -1,10 +1,10 @@
 package business;
 
-import model.ColdDrink;
-import model.HotDrink;
-import model.exception.NotEnoughMoneyException;
-import model.DrinkType;
-import model.SugarNumber;
+import business.notifier.BeverageQuantityChecker;
+import business.notifier.EmailNotifier;
+import exception.ShortageException;
+import model.*;
+import exception.NotEnoughMoneyException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -21,79 +21,86 @@ public class OrderSenderTest {
     @Mock
     private AccountReportRepository accountReportRepository;
 
+    @Mock
+    private EmailNotifier emailNotifier;
+
+    @Mock
+    private BeverageQuantityChecker beverageQuantityChecker;
+
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
+        when(beverageQuantityChecker.isEmpty(anyString())).thenReturn(false);
     }
 
     @Test
     public void shouldMakeATeaWith1Sugar(){
-        HotDrink hotDrink = createDrink(DrinkType.TEA, SugarNumber.ONE,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink, 1.0);
+        HotDrink hotDrink = createHotDrink(DrinkType.TEA, SugarNumber.ONE,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink, 1.0);
         verify(drinkMaker, times(1)).process("T:1:0");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
 
     @Test
     public void shouldMakeACoffeeWith2Sugars(){
-        HotDrink hotDrink = createDrink(DrinkType.COFFEE, SugarNumber.TWO,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink,1.0);
+        HotDrink hotDrink = createHotDrink(DrinkType.COFFEE, SugarNumber.TWO,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink,1.0);
         verify(drinkMaker, times(1)).process("C:2:0");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
 
     @Test
     public void shouldMakeAChocolateWithoutSugar(){
-        HotDrink hotDrink = createDrink(DrinkType.CHOCOLATE, SugarNumber.ZERO,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink,1.0);
+        HotDrink hotDrink = createHotDrink(DrinkType.CHOCOLATE, SugarNumber.ZERO,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink,1.0);
         verify(drinkMaker, times(1)).process("H::");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
 
     @Test
     public void shouldMakeAChocolateIfThereIsEnoughMoney(){
-        HotDrink hotDrink = createDrink(DrinkType.CHOCOLATE, SugarNumber.ZERO,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink,0.5);
+        HotDrink hotDrink = createHotDrink(DrinkType.CHOCOLATE, SugarNumber.ZERO,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink,0.5);
         verify(drinkMaker, times(1)).process("H::");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
 
     @Test
     public void shouldMakeACoffeeIfThereIsEnoughMoney(){
-        HotDrink hotDrink = createDrink(DrinkType.COFFEE, SugarNumber.ZERO,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink,0.6);
+        HotDrink hotDrink = createHotDrink(DrinkType.COFFEE, SugarNumber.ZERO,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink,0.6);
         verify(drinkMaker, times(1)).process("C::");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
 
     @Test
     public void shouldMakeATeaIfThereIsEnoughMoney(){
-        HotDrink hotDrink = createDrink(DrinkType.TEA, SugarNumber.ZERO,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink,0.4);
+        HotDrink hotDrink = createHotDrink(DrinkType.TEA, SugarNumber.ZERO,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink,0.4);
         verify(drinkMaker, times(1)).process("T::");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
 
     @Test
     public void shouldMakeAChocolateIfThereIsMoreMoneyThanExpected(){
-        HotDrink hotDrink = createDrink(DrinkType.CHOCOLATE, SugarNumber.ZERO,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink,0.8);
+        HotDrink hotDrink = createHotDrink(DrinkType.CHOCOLATE, SugarNumber.ZERO,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink,0.8);
         verify(drinkMaker, times(1)).process("H::");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
 
     @Test
     public void shouldMakeACoffeeIfThereIsMoreMoneyThanExpected(){
-        HotDrink hotDrink = createDrink(DrinkType.COFFEE, SugarNumber.ONE,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink,0.9);
+        HotDrink hotDrink = createHotDrink(DrinkType.COFFEE, SugarNumber.ONE,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink,0.9);
         verify(drinkMaker, times(1)).process("C:1:0");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
 
     @Test
     public void shouldMakeATeaIfThereIsMoreMoneyThanExpected(){
-        HotDrink hotDrink = createDrink(DrinkType.TEA, SugarNumber.ONE,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink,0.5);
+        HotDrink hotDrink = createHotDrink(DrinkType.TEA, SugarNumber.ONE,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink,0.5);
         verify(drinkMaker, times(1)).process("T:1:0");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
@@ -101,77 +108,116 @@ public class OrderSenderTest {
 
     @Test(expected = NotEnoughMoneyException.class)
     public void shouldThrowNotEnoughMoneyExceptionIfThereIsNotEnoughMoneyForChocolate(){
-        HotDrink hotDrink = createDrink(DrinkType.CHOCOLATE, SugarNumber.ZERO,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink,0.2);
+        HotDrink hotDrink = createHotDrink(DrinkType.CHOCOLATE, SugarNumber.ZERO,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink,0.2);
         verify(drinkMaker, times(1)).process("M:Missing 0.3 euro");
         verify(accountReportRepository, never()).save(hotDrink);
     }
 
     @Test(expected = NotEnoughMoneyException.class)
     public void shouldThrowNotEnoughMoneyExceptionIfThereIsNotEnoughMoneyForCoffee(){
-        HotDrink hotDrink = createDrink(DrinkType.COFFEE, SugarNumber.ZERO,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink,0.4);
+        HotDrink hotDrink = createHotDrink(DrinkType.COFFEE, SugarNumber.ZERO,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink,0.4);
         verify(drinkMaker, times(1)).process("M:Missing 0.2 euro");
         verify(accountReportRepository, never()).save(hotDrink);
     }
 
     @Test(expected = NotEnoughMoneyException.class)
     public void shouldThrowNotEnoughMoneyExceptionIfThereIsNotEnoughMoneyForTea(){
-        HotDrink hotDrink = createDrink(DrinkType.TEA, SugarNumber.ZERO,false);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink,0.3);
+        HotDrink hotDrink = createHotDrink(DrinkType.TEA, SugarNumber.ZERO,false);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink,0.3);
         verify(drinkMaker, times(1)).process("M:Missing 0.1 euro");
         verify(accountReportRepository, never()).save(hotDrink);
     }
 
     @Test
     public void shouldMakeAnOrangeJuice(){
-        ColdDrink coldDrink = new ColdDrink(DrinkType.ORANGE_JUICE);
-        new OrderSender(drinkMaker, accountReportRepository).send(coldDrink,0.6);
+        ColdDrink coldDrink = createColdDrink();
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(coldDrink,0.6);
         verify(drinkMaker, times(1)).process("O::");
         verify(accountReportRepository, times(1)).save(coldDrink);
     }
 
     @Test
     public void shouldMakeAnOrangeJuiceIfThereIsMoreMoneyThanExpected(){
-        ColdDrink coldDrink = new ColdDrink(DrinkType.ORANGE_JUICE);
-        new OrderSender(drinkMaker, accountReportRepository).send(coldDrink,0.9);
+        ColdDrink coldDrink = createColdDrink();
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(coldDrink,0.9);
         verify(drinkMaker, times(1)).process("O::");
         verify(accountReportRepository, times(1)).save(coldDrink);
     }
 
     @Test(expected = NotEnoughMoneyException.class)
     public void shouldThrowNotEnoughMoneyExceptionIfThereIsNotEnoughMoneyForOrangeJuice(){
-        ColdDrink coldDrink = new ColdDrink(DrinkType.ORANGE_JUICE);
-        new OrderSender(drinkMaker, accountReportRepository).send(coldDrink,0.5);
+        ColdDrink coldDrink = createColdDrink();
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(coldDrink,0.5);
         verify(drinkMaker, times(1)).process("M:Missing 0.1 euro");
         verify(accountReportRepository, never()).save(coldDrink);
     }
 
     @Test
     public void shouldMakeAnExtraHotCoffee(){
-        HotDrink hotDrink = createDrink(DrinkType.COFFEE, SugarNumber.ONE,true);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink, 1.0);
+        HotDrink hotDrink = createHotDrink(DrinkType.COFFEE, SugarNumber.ONE,true);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink, 1.0);
         verify(drinkMaker, times(1)).process("Ch:1:0");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
 
     @Test
     public void shouldMakeAnExtraHotChocolate(){
-        HotDrink hotDrink = createDrink(DrinkType.CHOCOLATE, SugarNumber.ONE,true);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink, 1.0);
+        HotDrink hotDrink = createHotDrink(DrinkType.CHOCOLATE, SugarNumber.ONE,true);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink, 1.0);
         verify(drinkMaker, times(1)).process("Hh:1:0");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
 
     @Test
     public void shouldMakeAnExtraHotTea(){
-        HotDrink hotDrink = createDrink(DrinkType.TEA, SugarNumber.ONE,true);
-        new OrderSender(drinkMaker, accountReportRepository).send(hotDrink, 1.0);
+        HotDrink hotDrink = createHotDrink(DrinkType.TEA, SugarNumber.ONE,true);
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(hotDrink, 1.0);
         verify(drinkMaker, times(1)).process("Th:1:0");
         verify(accountReportRepository, times(1)).save(hotDrink);
     }
-    private HotDrink createDrink(DrinkType type, SugarNumber sugarNumber, boolean isExtraHot){
-        return  new HotDrink(type,sugarNumber, isExtraHot);
+
+    @Test(expected = ShortageException.class)
+    public void shouldThrowShortageExceptionCoffeeCase(){
+        when(beverageQuantityChecker.isEmpty(anyString())).thenReturn(true);
+        HotDrink hotDrink = createHotDrink(DrinkType.COFFEE, SugarNumber.ONE,false);
+        verifyShortageExceptionOnDrinks(hotDrink, 0.8);
+    }
+
+    @Test(expected = ShortageException.class)
+    public void shouldThrowShortageExceptionChocolateCase(){
+        when(beverageQuantityChecker.isEmpty(anyString())).thenReturn(true);
+        HotDrink hotDrink = createHotDrink(DrinkType.CHOCOLATE, SugarNumber.ONE,false);
+        verifyShortageExceptionOnDrinks(hotDrink, 1.0);
+    }
+
+    @Test(expected = ShortageException.class)
+    public void shouldThrowShortageExceptionTeaCase(){
+        when(beverageQuantityChecker.isEmpty(anyString())).thenReturn(true);
+        HotDrink hotDrink = createHotDrink(DrinkType.TEA, SugarNumber.ONE,false);
+        verifyShortageExceptionOnDrinks(hotDrink, 0.7);
+    }
+
+    @Test(expected = ShortageException.class)
+    public void shouldThrowShortageExceptionOrangeJuiceCase(){
+        when(beverageQuantityChecker.isEmpty(anyString())).thenReturn(true);
+        ColdDrink coldDrink = createColdDrink();
+        verifyShortageExceptionOnDrinks(coldDrink, 0.7);
+    }
+
+    private HotDrink createHotDrink(DrinkType type, SugarNumber sugarNumber, boolean isExtraHot){
+        return new HotDrink(type,sugarNumber, isExtraHot);
+    }
+
+    private ColdDrink createColdDrink(){
+        return new ColdDrink(DrinkType.ORANGE_JUICE);
+    }
+
+    private void verifyShortageExceptionOnDrinks(Drink drink, double money){
+        new OrderSender(drinkMaker, accountReportRepository, emailNotifier, beverageQuantityChecker).send(drink,money);
+        verify(emailNotifier, times(1)).notifyMissingDrink(drink.getType().getCode());
+        verify(drinkMaker, times(1)).process("M:Shortage on :"+drink.getType().getCode());
     }
 
 }
