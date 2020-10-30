@@ -1,5 +1,6 @@
 package business;
 
+import business.report.ReportWriter;
 import model.Drink;
 import model.DrinkType;
 import model.SugarNumber;
@@ -22,7 +23,7 @@ import java.util.List;
 public class ReportWriterTest {
 
     @Spy
-    private AccountReportRepository accountReportRepository = spy(new AccountReportRepositoryImpl());
+    private final AccountReportRepository accountReportRepository = spy(new AccountReportRepositoryImpl());
 
     @Spy
     private ReportWriter reportWriter = new ReportWriter(accountReportRepository);
@@ -78,7 +79,7 @@ public class ReportWriterTest {
     }
 
     private void fillMachineHistory(List<Drink> drinks){
-        drinks.forEach(drink -> accountReportRepository.save(drink));
+        drinks.forEach(accountReportRepository::save);
     }
 
     private String[] extractAllLinesFromTheReport(ByteArrayOutputStream outContent){
