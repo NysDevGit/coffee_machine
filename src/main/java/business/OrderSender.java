@@ -2,6 +2,7 @@ package business;
 
 import model.Drink;
 import model.exception.NotEnoughMoneyException;
+import repository.AccountReportRepository;
 
 import java.util.StringJoiner;
 
@@ -9,13 +10,17 @@ public class OrderSender {
 
     private final DrinkMaker drinkMaker;
 
-    public OrderSender(DrinkMaker drinkMaker) {
+    private final AccountReportRepository accountReportRepository;
+
+    public OrderSender(DrinkMaker drinkMaker, AccountReportRepository accountReportRepository) {
         this.drinkMaker = drinkMaker;
+        this.accountReportRepository = accountReportRepository;
     }
 
     public void send(Drink order, double money){
         checkIfThereIsEnoughMoney(order, money);
         String stringOrder = translateOrder(order);
+        accountReportRepository.save(order);
         drinkMaker.process(stringOrder);
     }
 

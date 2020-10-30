@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Drink {
 
     private final DrinkType type;
@@ -27,5 +29,20 @@ public class Drink {
 
     public boolean isExtraHot(){
         return extraHot;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Drink drink = (Drink) o;
+        return extraHot == drink.extraHot &&
+                type == drink.type &&
+                sugarNumber == drink.sugarNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, sugarNumber, extraHot);
     }
 }
