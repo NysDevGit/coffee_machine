@@ -6,7 +6,7 @@ import java.util.StringJoiner;
 
 public class OrderSenderTranslator {
 
-    public static String translateOrder(Order order){
+  public static String translateOrder(Order order){
         StringJoiner stringOrder = new StringJoiner(":");
 
         stringOrder.add(order.getTypeCode());
