@@ -13,13 +13,13 @@ public class OrderSender {
 
     public void send(Order order, double money){
         this.checkIfMoneyAmountIsSufficient(order,money);
-        String translatedOrder = OrderSenderTranslator.translateOrder(order);
+        String translatedOrder = OrderTranslator.translateOrder(order);
         drinkMaker.process(translatedOrder);
     }
 
     private void checkIfMoneyAmountIsSufficient(Order order, double money){
         if(money < order.getPrice()){
-            String message = OrderSenderTranslator.translateMessage("Missing "+(order.getPrice() - money)+" euro");
+            String message = OrderTranslator.translateMessage("Missing "+(order.getPrice() - money)+" euro");
             drinkMaker.process(message);
             throw new LackOfMoneyException();
         }

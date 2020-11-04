@@ -4,7 +4,7 @@ import model.Order;
 
 import java.util.StringJoiner;
 
-public class OrderSenderTranslator {
+public class OrderTranslator {
 
     public static String translateOrder(Order order){
         StringJoiner stringOrder = new StringJoiner(":");
