@@ -1,5 +1,6 @@
 package business;
 
+import exception.IncompatibleDrinkTypeOrderException;
 import exception.LackOfMoneyException;
 import helper.OrderSenderTestHelper;
 import model.Order;
@@ -196,6 +197,14 @@ public class OrderSenderTest {
             new OrderSender(drinkMaker).send(order, 0.5);
             verify(drinkMaker, times(1)).process("O::");
         }
+
+        @Test
+        public void shouldThrowsIncompatibleDrinkTypeOrderExceptionWhenOrangeJuiceInstantiateAsHotDrink() {
+            Assertions.assertThrows(IncompatibleDrinkTypeOrderException.class,
+                    () -> OrderSenderTestHelper.createHotOrder(OrderType.ORANGE_JUICE,SugarQuantity.ZERO,false),
+                    "You can't instantiate a cold drink as hot drink");
+        }
+
     }
 
     @Nested

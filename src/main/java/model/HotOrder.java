@@ -15,7 +15,7 @@ public class HotOrder extends Order{
     }
 
     public String getCode() {
-       return extraHot ? this.getType().getCode()+"h" : this.getType().getCode();
+        return extraHot ? this.getType().getCode()+"h" : this.getType().getCode();
     }
 
 }
