@@ -1,24 +1,26 @@
 package model;
 
 public class Order {
-    private final OrderType type;
-    private final SugarQuantity sugarQuantity;
+    protected final OrderType type;
+    protected SugarQuantity sugarQuantity;
 
-    public Order(OrderType type, SugarQuantity sugarQuantity){
+    protected Order(OrderType type){
         this.type = type;
-        this.sugarQuantity = sugarQuantity;
     }
 
-    public String getCode() {
-        return type.getCode();
-    }
-
-    public double getPrice() {
-        return type.getPrice();
+    public OrderType getType() {
+        return type;
     }
 
     public String getSugarQuantity() {
         return sugarQuantity.getQuantity();
     }
 
+    public String getCode() {
+        return this.getType().getCode();
+    }
+
+    public double getPrice() {
+        return this.getType().getPrice();
+    }
 }
