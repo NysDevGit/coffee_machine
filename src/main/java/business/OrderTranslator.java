@@ -1,6 +1,6 @@
 package business;
 
-import model.Order;
+import model.order.Order;
 
 import java.util.StringJoiner;
 

@@ -1,12 +1,8 @@
-package model;
+package model.order.type;
 
-public enum OrderType {
-    CHOCOLATE("H", 0.5),
-    COFFEE("C",0.6),
-    TEA("T",0.4);
-
-    private final String code;
-    private final double price;
+public class OrderType {
+    protected final String code;
+    protected final double price;
 
     OrderType(String code, double price) {
         this.code = code;

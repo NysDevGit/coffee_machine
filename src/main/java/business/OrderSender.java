@@ -1,7 +1,7 @@
 package business;
 
 import exception.LackOfMoneyException;
-import model.Order;
+import model.order.Order;
 
 public class OrderSender {
 
