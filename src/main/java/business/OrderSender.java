@@ -1,5 +1,6 @@
 package business;
 
+import exception.LackOfMoneyException;
 import model.Order;
 
 public class OrderSender {
@@ -10,8 +11,17 @@ public class OrderSender {
         this.drinkMaker = drinkMaker;
     }
 
-    public void send(Order order){
-        String translatedOrder = OrderSenderTranslator.translateOrder(order);
-        drinkMaker.prepare(translatedOrder);
+    public void send(Order order, double money){
+        this.checkIfMoneyAmountIsSufficient(order,money);
+        String translatedOrder = OrderTranslator.translateOrder(order);
+        drinkMaker.process(translatedOrder);
+    }
+
+    private void checkIfMoneyAmountIsSufficient(Order order, double money){
+        if(money < order.getPrice()){
+            String message = OrderTranslator.translateMessage("Missing "+(order.getPrice() - money)+" euro");
+            drinkMaker.process(message);
+            throw new LackOfMoneyException();
+        }
     }
 }

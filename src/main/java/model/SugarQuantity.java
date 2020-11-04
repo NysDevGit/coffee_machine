@@ -7,8 +7,8 @@ public enum SugarQuantity {
 
     private final String quantity;
 
-    SugarQuantity(String value) {
-        this.quantity = value;
+    SugarQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
     public String getQuantity() {

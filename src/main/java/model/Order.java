@@ -9,8 +9,12 @@ public class Order {
         this.sugarQuantity = sugarQuantity;
     }
 
-    public String getTypeCode() {
+    public String getCode() {
         return type.getCode();
+    }
+
+    public double getPrice() {
+        return type.getPrice();
     }
 
     public String getSugarQuantity() {
