@@ -1,13 +1,14 @@
 package helper;
 
-import model.Order;
-import model.OrderType;
-import model.SugarQuantity;
+import model.*;
 
 public class OrderSenderTestHelper {
 
-    public static Order createOrder(OrderType type, SugarQuantity sugarQuantity){
-        return  new Order(type,sugarQuantity);
+    public static ColdOrder createColdOrder(){
+        return  new ColdOrder();
+    }
+    public static HotOrder createHotOrder(OrderType type, SugarQuantity sugarQuantity, boolean extraHot){
+        return  new HotOrder(type,sugarQuantity,extraHot);
     }
 
 }

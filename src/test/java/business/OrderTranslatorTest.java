@@ -15,21 +15,21 @@ public class OrderTranslatorTest {
 
         @Test
         public void shouldTranslateACoffeeWithoutSugar(){
-            Order order = OrderSenderTestHelper.createOrder(OrderType.COFFEE,SugarQuantity.ZERO);
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.COFFEE,SugarQuantity.ZERO,false);
             String translatedOrder = OrderTranslator.translateOrder(order);
             Assertions.assertEquals("C::", translatedOrder);
         }
 
         @Test
         public void shouldTranslateAChocolateWithoutSugar(){
-            Order order = OrderSenderTestHelper.createOrder(OrderType.CHOCOLATE,SugarQuantity.ZERO);
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.CHOCOLATE,SugarQuantity.ZERO,false);
             String translatedOrder = OrderTranslator.translateOrder(order);
             Assertions.assertEquals("H::", translatedOrder);
         }
 
         @Test
         public void shouldTranslateATeaWithoutSugar(){
-            Order order = OrderSenderTestHelper.createOrder(OrderType.TEA,SugarQuantity.ZERO);
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.TEA,SugarQuantity.ZERO,false);
             String translatedOrder = OrderTranslator.translateOrder(order);
             Assertions.assertEquals("T::", translatedOrder);
         }
@@ -40,21 +40,21 @@ public class OrderTranslatorTest {
 
         @Test
         public void shouldTranslateACoffeeWith1Sugar(){
-            Order order = OrderSenderTestHelper.createOrder(OrderType.COFFEE, SugarQuantity.ONE);
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.COFFEE, SugarQuantity.ONE,false);
             String translatedOrder = OrderTranslator.translateOrder(order);
             Assertions.assertEquals("C:1:0", translatedOrder);
         }
 
         @Test
         public void shouldTranslateAChocolateWith1Sugar(){
-            Order order = OrderSenderTestHelper.createOrder(OrderType.CHOCOLATE, SugarQuantity.ONE);
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.CHOCOLATE, SugarQuantity.ONE,false);
             String translatedOrder = OrderTranslator.translateOrder(order);
             Assertions.assertEquals("H:1:0", translatedOrder);
         }
 
         @Test
         public void shouldTranslateATeaWith1Sugar(){
-            Order order = OrderSenderTestHelper.createOrder(OrderType.TEA, SugarQuantity.ONE);
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.TEA, SugarQuantity.ONE,false);
             String translatedOrder = OrderTranslator.translateOrder(order);
             Assertions.assertEquals("T:1:0", translatedOrder);
         }
@@ -65,23 +65,48 @@ public class OrderTranslatorTest {
 
         @Test
         public void shouldTranslateACoffeeWith2Sugars(){
-            Order order = OrderSenderTestHelper.createOrder(OrderType.COFFEE,SugarQuantity.TWO);
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.COFFEE,SugarQuantity.TWO,false);
             String translatedOrder = OrderTranslator.translateOrder(order);
             Assertions.assertEquals("C:2:0", translatedOrder);
         }
 
         @Test
         public void shouldTranslateAChocolateWith2Sugars(){
-            Order order = OrderSenderTestHelper.createOrder(OrderType.CHOCOLATE,SugarQuantity.TWO);
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.CHOCOLATE,SugarQuantity.TWO,false);
             String translatedOrder = OrderTranslator.translateOrder(order);
             Assertions.assertEquals("H:2:0", translatedOrder);
         }
 
         @Test
         public void shouldTranslateATeaWith2Sugars(){
-            Order order = OrderSenderTestHelper.createOrder(OrderType.TEA,SugarQuantity.TWO);
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.TEA,SugarQuantity.TWO,false);
             String translatedOrder = OrderTranslator.translateOrder(order);
             Assertions.assertEquals("T:2:0", translatedOrder);
+        }
+    }
+
+    @Nested
+    class translateExtraHotOrder{
+
+        @Test
+        public void shouldTranslateACoffeeWith2Sugars(){
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.COFFEE,SugarQuantity.TWO,true);
+            String translatedOrder = OrderTranslator.translateOrder(order);
+            Assertions.assertEquals("Ch:2:0", translatedOrder);
+        }
+
+        @Test
+        public void shouldTranslateAChocolateWith2Sugars(){
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.CHOCOLATE,SugarQuantity.TWO,true);
+            String translatedOrder = OrderTranslator.translateOrder(order);
+            Assertions.assertEquals("Hh:2:0", translatedOrder);
+        }
+
+        @Test
+        public void shouldTranslateATeaWith2Sugars(){
+            Order order = OrderSenderTestHelper.createHotOrder(OrderType.TEA,SugarQuantity.TWO,true);
+            String translatedOrder = OrderTranslator.translateOrder(order);
+            Assertions.assertEquals("Th:2:0", translatedOrder);
         }
     }
 
