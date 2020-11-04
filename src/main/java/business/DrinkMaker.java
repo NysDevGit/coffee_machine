@@ -1,5 +1,5 @@
 package business;
 
 public interface DrinkMaker {
-    String prepare(String order);
+    String process(String order);
 }
