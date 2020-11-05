@@ -110,4 +110,13 @@ public class OrderTranslatorTest {
         }
     }
 
+    @Nested
+    class translateMessage{
+        @Test
+        public void shouldTranslateMessage() {
+            String translatedMessage = OrderTranslator.translateMessage("TEST");
+            Assertions.assertEquals("M:TEST", translatedMessage);
+        }
+    }
+
 }
